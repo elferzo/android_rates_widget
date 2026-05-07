@@ -101,18 +101,20 @@ class PriceWidget : AppWidgetProvider() {
             // GMT
             result.add(fetchBinance("GMTUSDT", 4))
 
-            // XAU — metals.live
+            // XAU — freegoldapi.com (no key, returns [{date,price},...])
             try {
-                val text = get("https://api.metals.live/v1/spot/gold")
+                val text = get("https://freegoldapi.com/data/latest.json")
                 val arr = org.json.JSONArray(text.trim())
-                val price = arr.getJSONObject(0).getDouble("gold")
+                val price = arr.getJSONObject(arr.length() - 1).getDouble("price")
                 result.add(AssetPrice("\$${fmt(price, false)}", 0.0))
             } catch (e: Exception) {
                 try {
-                    // fallback: frankfurter XAU->USD
-                    val json = JSONObject(get("https://api.frankfurter.app/latest?from=XAU&to=USD"))
-                    val price = json.getJSONObject("rates").getDouble("USD")
-                    result.add(AssetPrice("\$${fmt(price, false)}", 0.0))
+                    // fallback: Yahoo Finance GC=F (gold futures)
+                    val json = JSONObject(get("https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?interval=1d&range=2d"))
+                    val meta = json.getJSONObject("chart").getJSONArray("result").getJSONObject(0).getJSONObject("meta")
+                    val price = meta.getDouble("regularMarketPrice")
+                    val prev = meta.getDouble("chartPreviousClose")
+                    result.add(AssetPrice("\$${fmt(price, false)}", if (prev > 0) (price - prev) / prev * 100 else 0.0))
                 } catch (e2: Exception) {
                     result.add(AssetPrice("—", 0.0))
                 }
