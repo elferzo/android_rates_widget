@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@drawable/widget_bg"
-    android:padding="10dp">
+    android:background="@android:color/transparent"
+    android:padding="8dp">
 
     <TextView
         android:id="@+id/header_updated"
@@ -14,88 +14,88 @@
         android:text="Обновлено только что"
         android:textColor="#88FFFFFF"
         android:textSize="10sp"
-        android:layout_marginBottom="6dp"/>
+        android:layout_marginBottom="4dp"/>
 
+    <!-- ROW 1: BTC -->
     <TextView android:id="@+id/row1"
-        android:layout_width="match_parent" android:layout_height="30dp"
-        android:text="BTC" android:textColor="#B0B0B0" android:textSize="13sp" android:textStyle="bold"
+        android:layout_width="match_parent" android:layout_height="32dp"
+        android:text="₿  BTC" android:textColor="#F7931A"
+        android:textSize="13sp" android:textStyle="bold"
         android:gravity="center_vertical"/>
-
     <TextView android:id="@+id/price1"
         android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:text="—" android:textColor="#FFFFFF" android:textSize="14sp" android:textStyle="bold"
-        android:layout_marginBottom="2dp"/>
-
+        android:text="—" android:textColor="#FFFFFF"
+        android:textSize="15sp" android:textStyle="bold"/>
     <TextView android:id="@+id/change1"
         android:layout_width="match_parent" android:layout_height="wrap_content"
         android:text="" android:textSize="11sp" android:layout_marginBottom="6dp"/>
 
+    <!-- ROW 2: ETH -->
     <TextView android:id="@+id/row2"
-        android:layout_width="match_parent" android:layout_height="30dp"
-        android:text="ETH" android:textColor="#B0B0B0" android:textSize="13sp" android:textStyle="bold"
+        android:layout_width="match_parent" android:layout_height="32dp"
+        android:text="Ξ  ETH" android:textColor="#627EEA"
+        android:textSize="13sp" android:textStyle="bold"
         android:gravity="center_vertical"/>
-
     <TextView android:id="@+id/price2"
         android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:text="—" android:textColor="#FFFFFF" android:textSize="14sp" android:textStyle="bold"
-        android:layout_marginBottom="2dp"/>
-
+        android:text="—" android:textColor="#FFFFFF"
+        android:textSize="15sp" android:textStyle="bold"/>
     <TextView android:id="@+id/change2"
         android:layout_width="match_parent" android:layout_height="wrap_content"
         android:text="" android:textSize="11sp" android:layout_marginBottom="6dp"/>
 
+    <!-- ROW 3: SOL -->
     <TextView android:id="@+id/row3"
-        android:layout_width="match_parent" android:layout_height="30dp"
-        android:text="SOL" android:textColor="#B0B0B0" android:textSize="13sp" android:textStyle="bold"
+        android:layout_width="match_parent" android:layout_height="32dp"
+        android:text="◎  SOL" android:textColor="#9945FF"
+        android:textSize="13sp" android:textStyle="bold"
         android:gravity="center_vertical"/>
-
     <TextView android:id="@+id/price3"
         android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:text="—" android:textColor="#FFFFFF" android:textSize="14sp" android:textStyle="bold"
-        android:layout_marginBottom="2dp"/>
-
+        android:text="—" android:textColor="#FFFFFF"
+        android:textSize="15sp" android:textStyle="bold"/>
     <TextView android:id="@+id/change3"
         android:layout_width="match_parent" android:layout_height="wrap_content"
         android:text="" android:textSize="11sp" android:layout_marginBottom="6dp"/>
 
+    <!-- ROW 4: XAU -->
     <TextView android:id="@+id/row4"
-        android:layout_width="match_parent" android:layout_height="30dp"
-        android:text="XAU" android:textColor="#B0B0B0" android:textSize="13sp" android:textStyle="bold"
+        android:layout_width="match_parent" android:layout_height="32dp"
+        android:text="▲  XAU" android:textColor="#FFD700"
+        android:textSize="13sp" android:textStyle="bold"
         android:gravity="center_vertical"/>
-
     <TextView android:id="@+id/price4"
         android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:text="—" android:textColor="#FFFFFF" android:textSize="14sp" android:textStyle="bold"
-        android:layout_marginBottom="2dp"/>
-
+        android:text="—" android:textColor="#FFFFFF"
+        android:textSize="15sp" android:textStyle="bold"/>
     <TextView android:id="@+id/change4"
         android:layout_width="match_parent" android:layout_height="wrap_content"
         android:text="" android:textSize="11sp" android:layout_marginBottom="6dp"/>
 
+    <!-- ROW 5: Brent -->
     <TextView android:id="@+id/row5"
-        android:layout_width="match_parent" android:layout_height="30dp"
-        android:text="Brent" android:textColor="#B0B0B0" android:textSize="13sp" android:textStyle="bold"
+        android:layout_width="match_parent" android:layout_height="32dp"
+        android:text="⬡  Brent" android:textColor="#4FC3F7"
+        android:textSize="13sp" android:textStyle="bold"
         android:gravity="center_vertical"/>
-
     <TextView android:id="@+id/price5"
         android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:text="—" android:textColor="#FFFFFF" android:textSize="14sp" android:textStyle="bold"
-        android:layout_marginBottom="2dp"/>
-
+        android:text="—" android:textColor="#FFFFFF"
+        android:textSize="15sp" android:textStyle="bold"/>
     <TextView android:id="@+id/change5"
         android:layout_width="match_parent" android:layout_height="wrap_content"
         android:text="" android:textSize="11sp" android:layout_marginBottom="6dp"/>
 
+    <!-- ROW 6: USD/RUB -->
     <TextView android:id="@+id/row6"
-        android:layout_width="match_parent" android:layout_height="30dp"
-        android:text="USD/RUB" android:textColor="#B0B0B0" android:textSize="13sp" android:textStyle="bold"
+        android:layout_width="match_parent" android:layout_height="32dp"
+        android:text="₽  USD/RUB" android:textColor="#4DB6AC"
+        android:textSize="13sp" android:textStyle="bold"
         android:gravity="center_vertical"/>
-
     <TextView android:id="@+id/price6"
         android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:text="—" android:textColor="#FFFFFF" android:textSize="14sp" android:textStyle="bold"
-        android:layout_marginBottom="2dp"/>
-
+        android:text="—" android:textColor="#FFFFFF"
+        android:textSize="15sp" android:textStyle="bold"/>
     <TextView android:id="@+id/change6"
         android:layout_width="match_parent" android:layout_height="wrap_content"
         android:text="" android:textSize="11sp"/>
