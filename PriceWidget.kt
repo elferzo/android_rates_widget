@@ -13,9 +13,7 @@ import android.os.Looper
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
-import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
-import android.text.style.TabStopSpan
 import android.widget.RemoteViews
 import org.json.JSONArray
 import org.json.JSONObject
@@ -30,14 +28,12 @@ class PriceWidget : AppWidgetProvider() {
         for (id in ids) updateWidget(context, mgr, id)
         scheduleNext(context)
     }
-
     override fun onEnabled(context: Context) {
         val mgr = AppWidgetManager.getInstance(context)
         val ids = mgr.getAppWidgetIds(android.content.ComponentName(context, PriceWidget::class.java))
         for (id in ids) updateWidget(context, mgr, id)
         scheduleNext(context)
     }
-
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
         if (intent.action == ACTION_UPDATE) {
@@ -51,32 +47,17 @@ class PriceWidget : AppWidgetProvider() {
     companion object {
         const val ACTION_UPDATE = "com.pricewidget.ACTION_UPDATE"
 
-        val ROW_IDS = intArrayOf(
-            R.id.row1, R.id.row2, R.id.row3, R.id.row4, R.id.row5,
-            R.id.row6, R.id.row7, R.id.row8, R.id.row9
-        )
-        val CHANGE_IDS = intArrayOf(
-            R.id.change1, R.id.change2, R.id.change3, R.id.change4, R.id.change5,
-            R.id.change6, R.id.change7, R.id.change8, R.id.change9
-        )
+        val ROW_IDS    = intArrayOf(R.id.row1,R.id.row2,R.id.row3,R.id.row4,R.id.row5,R.id.row6,R.id.row7,R.id.row8,R.id.row9)
+        val CHANGE_IDS = intArrayOf(R.id.change1,R.id.change2,R.id.change3,R.id.change4,R.id.change5,R.id.change6,R.id.change7,R.id.change8,R.id.change9)
 
         val COLORS = intArrayOf(
-            0xFFF7931A.toInt(),  // BTC
-            0xFF627EEA.toInt(),  // ETH
-            0xFF9945FF.toInt(),  // SOL
-            0xFFC2A633.toInt(),  // DOGE
-            0xFFBFBBBB.toInt(),  // LTC
-            0xFF1DB954.toInt(),  // GMT
-            0xFFFFD700.toInt(),  // XAU
-            0xFF4FC3F7.toInt(),  // Brent
-            0xFF4DB6AC.toInt()   // USD/RUB
+            0xFFF7931A.toInt(), 0xFF627EEA.toInt(), 0xFF9945FF.toInt(),
+            0xFFC2A633.toInt(), 0xFFBFBBBB.toInt(), 0xFF1DB954.toInt(),
+            0xFFFFD700.toInt(), 0xFF4FC3F7.toInt(), 0xFF4DB6AC.toInt()
         )
-        val LABELS = arrayOf("BTC", "ETH", "SOL", "DOGE", "LTC", "GMT", "XAU", "Brent", "USD/RUB")
-
-        // Tab stop в пикселях — колонка цены начинается с 200px, % с 420px
-        // Значения подобраны под ~14sp шрифт на стандартной плотности
-        const val TAB_PRICE = 200
-        const val TAB_CHANGE = 430
+        // Все лейблы дополняем до 7 символов пробелами → цена всегда с одной позиции
+        val LABELS  = arrayOf("BTC", "ETH", "SOL", "DOGE", "LTC", "GMT", "XAU", "Brent", "USD/RUB")
+        val PADDED  = LABELS.map { it.padEnd(7) }.toTypedArray()  // "BTC    ", "DOGE   ", etc.
 
         fun updateWidget(context: Context, mgr: AppWidgetManager, widgetId: Int) {
             Executors.newSingleThreadExecutor().execute {
@@ -102,103 +83,78 @@ class PriceWidget : AppWidgetProvider() {
         }
 
         fun fetchPrices(): List<AssetPrice> {
-            val result = mutableListOf<AssetPrice>()
-            result.add(fetchBinance("BTCUSDT", 2))
-            result.add(fetchBinance("ETHUSDT", 2))
-            result.add(fetchBinance("SOLUSDT", 2))
-            result.add(fetchBinance("DOGEUSDT", 4))
-            result.add(fetchBinance("LTCUSDT", 2))
-            result.add(fetchBinance("GMTUSDT", 4))
-
+            val r = mutableListOf<AssetPrice>()
+            r.add(fetchBinance("BTCUSDT",  2))
+            r.add(fetchBinance("ETHUSDT",  2))
+            r.add(fetchBinance("SOLUSDT",  2))
+            r.add(fetchBinance("DOGEUSDT", 4))
+            r.add(fetchBinance("LTCUSDT",  2))
+            r.add(fetchBinance("GMTUSDT",  4))
             // XAU
             try {
                 val arr = JSONArray(get("https://freegoldapi.com/data/latest.json"))
-                val price = arr.getJSONObject(arr.length() - 1).getDouble("price")
-                result.add(AssetPrice("\$${fmt(price, false)}", 0.0))
+                r.add(AssetPrice("\$${fmt(arr.getJSONObject(arr.length()-1).getDouble("price"), false)}", 0.0))
             } catch (e: Exception) {
                 try {
                     val meta = JSONObject(get("https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?interval=1d&range=2d"))
                         .getJSONObject("chart").getJSONArray("result").getJSONObject(0).getJSONObject("meta")
-                    val price = meta.getDouble("regularMarketPrice")
-                    val prev = meta.getDouble("chartPreviousClose")
-                    result.add(AssetPrice("\$${fmt(price, false)}", if (prev > 0) (price - prev) / prev * 100 else 0.0))
-                } catch (e2: Exception) { result.add(AssetPrice("—", 0.0)) }
+                    val p = meta.getDouble("regularMarketPrice"); val pv = meta.getDouble("chartPreviousClose")
+                    r.add(AssetPrice("\$${fmt(p,false)}", if(pv>0)(p-pv)/pv*100 else 0.0))
+                } catch(e2:Exception){ r.add(AssetPrice("—",0.0)) }
             }
-
             // Brent
             try {
                 val meta = JSONObject(get("https://query1.finance.yahoo.com/v8/finance/chart/BZ%3DF?interval=1d&range=2d"))
                     .getJSONObject("chart").getJSONArray("result").getJSONObject(0).getJSONObject("meta")
-                val price = meta.getDouble("regularMarketPrice")
-                val prev = meta.getDouble("chartPreviousClose")
-                result.add(AssetPrice("\$${fmt(price, false)}", if (prev > 0) (price - prev) / prev * 100 else 0.0))
-            } catch (e: Exception) { result.add(AssetPrice("—", 0.0)) }
-
+                val p = meta.getDouble("regularMarketPrice"); val pv = meta.getDouble("chartPreviousClose")
+                r.add(AssetPrice("\$${fmt(p,false)}", if(pv>0)(p-pv)/pv*100 else 0.0))
+            } catch(e:Exception){ r.add(AssetPrice("—",0.0)) }
             // USD/RUB
             try {
-                val rub = JSONObject(get("https://open.er-api.com/v6/latest/USD")).getJSONObject("rates").getDouble("RUB")
-                result.add(AssetPrice(fmt(rub, false), 0.0))
-            } catch (e: Exception) {
-                try {
-                    val rub = JSONObject(get("https://api.frankfurter.app/latest?from=USD&to=RUB")).getJSONObject("rates").getDouble("RUB")
-                    result.add(AssetPrice(fmt(rub, false), 0.0))
-                } catch (e2: Exception) { result.add(AssetPrice("—", 0.0)) }
+                r.add(AssetPrice(fmt(JSONObject(get("https://open.er-api.com/v6/latest/USD")).getJSONObject("rates").getDouble("RUB"),false),0.0))
+            } catch(e:Exception){
+                try { r.add(AssetPrice(fmt(JSONObject(get("https://api.frankfurter.app/latest?from=USD&to=RUB")).getJSONObject("rates").getDouble("RUB"),false),0.0)) }
+                catch(e2:Exception){ r.add(AssetPrice("—",0.0)) }
             }
-
-            return result
+            return r
         }
 
         private fun fetchBinance(symbol: String, decimals: Int = 2): AssetPrice {
             return try {
                 val json = JSONObject(get("https://api.binance.com/api/v3/ticker/24hr?symbol=$symbol"))
                 val price = json.getDouble("lastPrice")
-                val change = json.getDouble("priceChangePercent")
-                AssetPrice("\$${fmtD(price, price >= 1000, decimals)}", change)
-            } catch (e: Exception) { AssetPrice("—", 0.0) }
+                AssetPrice("\$${fmtD(price, price>=1000, decimals)}", json.getDouble("priceChangePercent"))
+            } catch(e:Exception){ AssetPrice("—",0.0) }
         }
 
         fun buildRows(views: RemoteViews, prices: List<AssetPrice>) {
             val df = DecimalFormat("+0.00;-0.00")
             for (i in prices.indices) {
-                val label = LABELS[i]
-                val price = prices[i].price
-                val ch = prices[i].change
-                val chStr = if (ch != 0.0) df.format(ch) + "%" else ""
+                val label  = PADDED[i]   // "BTC    " — выровнено до 7 символов
+                val price  = prices[i].price
+                val ch     = prices[i].change
 
-                // Формат: "● LABEL\tPRICE\tCHANGE"
-                // \t — tab stop, каждая колонка начинается с фиксированной позиции
-                val full = "● $label\t$price\t$chStr"
-                val ss = SpannableString(full)
-
-                // Tab stops: цена на 200px, % на 430px
-                ss.setSpan(TabStopSpan.Standard(TAB_PRICE), 0, full.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-
-                // Буллет цветной
+                // Строка 1: "● BTC     $80,937"
+                val row = "● $label $price"
+                val ss  = SpannableString(row)
+                // буллет цветной
                 ss.setSpan(ForegroundColorSpan(COLORS[i]), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-
-                // Лейбл белый bold
-                val labelEnd = 2 + label.length
-                ss.setSpan(StyleSpan(Typeface.BOLD), 2, labelEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-                ss.setSpan(ForegroundColorSpan(0xFFFFFFFF.toInt()), 2, labelEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-
-                // Цена — после первого \t
-                val priceStart = labelEnd + 1
-                val priceEnd = priceStart + price.length
-                ss.setSpan(StyleSpan(Typeface.BOLD), priceStart, priceEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-                ss.setSpan(ForegroundColorSpan(0xFFFFFFFF.toInt()), priceStart, priceEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-
-                // % — после второго \t, цветной
-                if (chStr.isNotEmpty()) {
-                    val changeStart = priceEnd + 1
-                    ss.setSpan(
-                        ForegroundColorSpan(if (ch >= 0) 0xFF4CAF50.toInt() else 0xFFE53935.toInt()),
-                        changeStart, full.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                    )
-                }
-
+                // label белый bold
+                ss.setSpan(StyleSpan(Typeface.BOLD), 2, 2+label.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                ss.setSpan(ForegroundColorSpan(0xFFFFFFFF.toInt()), 2, 2+label.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                // цена белая bold
+                val ps = row.length - price.length
+                ss.setSpan(StyleSpan(Typeface.BOLD), ps, row.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                ss.setSpan(ForegroundColorSpan(0xFFFFFFFF.toInt()), ps, row.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
                 views.setTextViewText(ROW_IDS[i], ss)
-                // change TextView скрываем — всё в одной строке
-                views.setTextViewText(CHANGE_IDS[i], "")
+
+                // Строка 2: % изменение
+                if (ch != 0.0) {
+                    views.setTextViewText(CHANGE_IDS[i], "         ${df.format(ch)}%")
+                    views.setTextColor(CHANGE_IDS[i], if(ch>=0) 0xFF4CAF50.toInt() else 0xFFE53935.toInt())
+                } else {
+                    views.setTextViewText(CHANGE_IDS[i], "")
+                }
             }
         }
 
@@ -215,10 +171,9 @@ class PriceWidget : AppWidgetProvider() {
 
         private fun fmt(v: Double, large: Boolean) =
             if (large) DecimalFormat("#,##0").format(v) else DecimalFormat("#,##0.00").format(v)
-
         private fun fmtD(v: Double, large: Boolean, d: Int): String {
             if (large) return DecimalFormat("#,##0").format(v)
-            return DecimalFormat("#,##0." + "0".repeat(d)).format(v)
+            return DecimalFormat("#,##0."+"0".repeat(d)).format(v)
         }
     }
 }
