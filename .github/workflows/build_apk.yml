@@ -32,65 +32,11 @@ jobs:
           gradle wrapper --gradle-version 8.4
           chmod +x gradlew
 
-      - name: Create settings.gradle
-        run: printf "include ':app'\n" > settings.gradle
-
-      - name: Create root build.gradle
+      - name: Place gradle build files
         run: |
-          cat > build.gradle << 'GRADLE'
-buildscript {
-    ext.kotlin_version = '1.9.0'
-    repositories {
-        google()
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:8.1.0'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    }
-}
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
-GRADLE
-
-      - name: Create app/build.gradle
-        run: |
-          cat > app/build.gradle << 'GRADLE'
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-
-android {
-    compileSdk 34
-    defaultConfig {
-        applicationId "com.pricewidget.widget"
-        minSdk 21
-        targetSdk 34
-        versionCode 1
-        versionName "1.0"
-    }
-    buildTypes {
-        release {
-            minifyEnabled false
-        }
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
-}
-
-dependencies {
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-}
-GRADLE
+          cp root.build.gradle build.gradle
+          cp app.build.gradle app/build.gradle
+          echo "include ':app'" > settings.gradle
 
       - name: Build APK
         run: ./gradlew assembleRelease --no-daemon
