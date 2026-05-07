@@ -13,7 +13,6 @@ cp MainActivity.kt   "$KT/"
 cp BootReceiver.kt   "$KT/"
 cp widget_layout.xml "$RES/layout/"
 cp AndroidManifest.xml "$BASE/"
-cp gradle.properties .
 
 # Иконки из корня репо в drawable
 cp ic_btc.xml    "$RES/drawable/"
