@@ -8,6 +8,9 @@ on:
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -21,44 +24,26 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Prepare all build files
+      - name: Build everything in one step
         run: |
-          set -x
+          set -e
+
           cp root_build_gradle.txt build.gradle
           echo "include ':app'" > settings.gradle
           bash setup_project.sh
           cp app_build_gradle.txt app/build.gradle
-          echo "--- FILES IN ROOT ---"
-          ls -la
-          echo "--- build.gradle ---"
-          cat build.gradle
-          echo "--- settings.gradle ---"
-          cat settings.gradle
-          echo "--- app/build.gradle ---"
-          cat app/build.gradle
 
-      - name: Install Gradle 8.4
-        run: |
           wget -q https://services.gradle.org/distributions/gradle-8.4-bin.zip -O /tmp/gradle.zip
           unzip -q /tmp/gradle.zip -d /opt/gradle
-          echo "/opt/gradle/gradle-8.4/bin" >> $GITHUB_PATH
+          export PATH=/opt/gradle/gradle-8.4/bin:$PATH
 
-      - name: Verify files before build
-        run: |
-          echo "--- ls root ---"
-          ls -la
-          echo "--- which gradle ---"
-          which gradle
-          gradle --version
-
-      - name: Build APK
-        run: gradle assembleRelease --no-daemon --stacktrace
+          gradle assembleDebug --no-daemon
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: PriceWidget-release
-          path: app/build/outputs/apk/release/*.apk
+          name: PriceWidget-debug
+          path: app/build/outputs/apk/debug/*.apk
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
@@ -66,6 +51,6 @@ jobs:
         with:
           tag_name: v${{ github.run_number }}
           name: PriceWidget v${{ github.run_number }}
-          files: app/build/outputs/apk/release/*.apk
+          files: app/build/outputs/apk/debug/*.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
