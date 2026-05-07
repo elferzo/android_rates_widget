@@ -1,7 +1,4 @@
 #!/bin/bash
-# Setup script for PriceWidget Android project
-# Run from the root of the repo after cloning
-
 set -e
 
 BASE="app/src/main"
@@ -16,31 +13,49 @@ mkdir -p "$RES/xml"
 mkdir -p "$RES/drawable"
 mkdir -p "$RES/values"
 
-# Move Kotlin sources
-cp PriceWidget.kt   "$KT/"
-cp MainActivity.kt  "$KT/"
-cp BootReceiver.kt  "$KT/"
+# Kotlin sources
+for f in PriceWidget.kt MainActivity.kt BootReceiver.kt; do
+  cp "$f" "$KT/" && echo "  copied $f"
+done
 
-# Move resources
+# Layout
 cp widget_layout.xml "$RES/layout/"
-cp widget_info.xml   "$RES/xml/"
-cp widget_bg.xml     "$RES/drawable/"
 
-# Move manifest
+# AndroidManifest
 cp AndroidManifest.xml "$BASE/"
 
-# Create strings.xml if missing
-cat > "$RES/values/strings.xml" <<'EOF'
+# strings.xml
+cat > "$RES/values/strings.xml" << 'XML'
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Price Widget</string>
 </resources>
-EOF
+XML
 
-echo "✅ Project structure ready!"
-echo ""
-echo "Next steps:"
-echo "  1. Open in Android Studio OR use GitHub Actions to build APK"
-echo "  2. Install APK on phone"
-echo "  3. Open 'Price Widget' app → grant exact alarm permission"
-echo "  4. Long-press home screen → Widgets → Price Widget (4×5)"
+# widget_info.xml — generated inline, no cp needed
+cat > "$RES/xml/widget_info.xml" << 'XML'
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:minWidth="250dp"
+    android:minHeight="280dp"
+    android:targetCellWidth="4"
+    android:targetCellHeight="5"
+    android:updatePeriodMillis="0"
+    android:initialLayout="@layout/widget_layout"
+    android:previewLayout="@layout/widget_layout"
+    android:resizeMode="horizontal|vertical"
+    android:widgetCategory="home_screen" />
+XML
+
+# widget_bg.xml — generated inline
+cat > "$RES/drawable/widget_bg.xml" << 'XML'
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="#CC1A1A2E" />
+    <corners android:radius="16dp" />
+</shape>
+XML
+
+echo "Project structure ready!"
