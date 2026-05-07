@@ -21,25 +21,38 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Setup project structure
-        run: bash setup_project.sh
+      - name: Prepare all build files
+        run: |
+          set -x
+          cp root_build_gradle.txt build.gradle
+          echo "include ':app'" > settings.gradle
+          bash setup_project.sh
+          cp app_build_gradle.txt app/build.gradle
+          echo "--- FILES IN ROOT ---"
+          ls -la
+          echo "--- build.gradle ---"
+          cat build.gradle
+          echo "--- settings.gradle ---"
+          cat settings.gradle
+          echo "--- app/build.gradle ---"
+          cat app/build.gradle
 
-      - name: Install Gradle wrapper
+      - name: Install Gradle 8.4
         run: |
           wget -q https://services.gradle.org/distributions/gradle-8.4-bin.zip -O /tmp/gradle.zip
           unzip -q /tmp/gradle.zip -d /opt/gradle
-          export PATH=/opt/gradle/gradle-8.4/bin:$PATH
-          gradle wrapper --gradle-version 8.4
-          chmod +x gradlew
+          echo "/opt/gradle/gradle-8.4/bin" >> $GITHUB_PATH
 
-      - name: Place gradle build files
+      - name: Verify files before build
         run: |
-          cp root.build.gradle build.gradle
-          cp app.build.gradle app/build.gradle
-          echo "include ':app'" > settings.gradle
+          echo "--- ls root ---"
+          ls -la
+          echo "--- which gradle ---"
+          which gradle
+          gradle --version
 
       - name: Build APK
-        run: ./gradlew assembleRelease --no-daemon
+        run: gradle assembleRelease --no-daemon --stacktrace
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
