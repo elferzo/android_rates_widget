@@ -10,10 +10,15 @@
         android:layout_width="1dp" android:layout_height="1dp"
         android:text="" android:layout_alignParentTop="true"/>
 
-    <!-- ROW 1 -->
+    <!-- ROW 1 BTC -->
+    <ImageView android:id="@+id/icon1"
+        android:layout_width="24dp" android:layout_height="24dp"
+        android:layout_below="@id/header_updated" android:layout_marginTop="4dp"
+        android:src="@drawable/ic_btc"/>
     <TextView android:id="@+id/row1"
-        android:layout_width="110dp" android:layout_height="32dp"
+        android:layout_width="80dp" android:layout_height="32dp"
         android:layout_below="@id/header_updated"
+        android:layout_toRightOf="@id/icon1" android:layout_marginLeft="4dp"
         android:text="BTC" android:textColor="#FFFFFF" android:textSize="15sp" android:textStyle="bold"
         android:gravity="center_vertical"/>
     <TextView android:id="@+id/price1"
@@ -26,10 +31,15 @@
         android:layout_below="@id/header_updated" android:layout_toRightOf="@id/price1"
         android:text="" android:textSize="12sp" android:gravity="center_vertical"/>
 
-    <!-- ROW 2 -->
+    <!-- ROW 2 ETH -->
+    <ImageView android:id="@+id/icon2"
+        android:layout_width="24dp" android:layout_height="24dp"
+        android:layout_below="@id/row1" android:layout_marginTop="4dp"
+        android:src="@drawable/ic_eth"/>
     <TextView android:id="@+id/row2"
-        android:layout_width="110dp" android:layout_height="32dp"
+        android:layout_width="80dp" android:layout_height="32dp"
         android:layout_below="@id/row1"
+        android:layout_toRightOf="@id/icon2" android:layout_marginLeft="4dp"
         android:text="ETH" android:textColor="#FFFFFF" android:textSize="15sp" android:textStyle="bold"
         android:gravity="center_vertical"/>
     <TextView android:id="@+id/price2"
@@ -42,10 +52,15 @@
         android:layout_below="@id/row1" android:layout_toRightOf="@id/price2"
         android:text="" android:textSize="12sp" android:gravity="center_vertical"/>
 
-    <!-- ROW 3 -->
+    <!-- ROW 3 SOL -->
+    <ImageView android:id="@+id/icon3"
+        android:layout_width="24dp" android:layout_height="24dp"
+        android:layout_below="@id/row2" android:layout_marginTop="4dp"
+        android:src="@drawable/ic_sol"/>
     <TextView android:id="@+id/row3"
-        android:layout_width="110dp" android:layout_height="32dp"
+        android:layout_width="80dp" android:layout_height="32dp"
         android:layout_below="@id/row2"
+        android:layout_toRightOf="@id/icon3" android:layout_marginLeft="4dp"
         android:text="SOL" android:textColor="#FFFFFF" android:textSize="15sp" android:textStyle="bold"
         android:gravity="center_vertical"/>
     <TextView android:id="@+id/price3"
@@ -58,10 +73,15 @@
         android:layout_below="@id/row2" android:layout_toRightOf="@id/price3"
         android:text="" android:textSize="12sp" android:gravity="center_vertical"/>
 
-    <!-- ROW 4 -->
+    <!-- ROW 4 DOGE -->
+    <ImageView android:id="@+id/icon4"
+        android:layout_width="24dp" android:layout_height="24dp"
+        android:layout_below="@id/row3" android:layout_marginTop="4dp"
+        android:src="@drawable/ic_doge"/>
     <TextView android:id="@+id/row4"
-        android:layout_width="110dp" android:layout_height="32dp"
+        android:layout_width="80dp" android:layout_height="32dp"
         android:layout_below="@id/row3"
+        android:layout_toRightOf="@id/icon4" android:layout_marginLeft="4dp"
         android:text="DOGE" android:textColor="#FFFFFF" android:textSize="15sp" android:textStyle="bold"
         android:gravity="center_vertical"/>
     <TextView android:id="@+id/price4"
@@ -74,10 +94,15 @@
         android:layout_below="@id/row3" android:layout_toRightOf="@id/price4"
         android:text="" android:textSize="12sp" android:gravity="center_vertical"/>
 
-    <!-- ROW 5 -->
+    <!-- ROW 5 LTC -->
+    <ImageView android:id="@+id/icon5"
+        android:layout_width="24dp" android:layout_height="24dp"
+        android:layout_below="@id/row4" android:layout_marginTop="4dp"
+        android:src="@drawable/ic_ltc"/>
     <TextView android:id="@+id/row5"
-        android:layout_width="110dp" android:layout_height="32dp"
+        android:layout_width="80dp" android:layout_height="32dp"
         android:layout_below="@id/row4"
+        android:layout_toRightOf="@id/icon5" android:layout_marginLeft="4dp"
         android:text="LTC" android:textColor="#FFFFFF" android:textSize="15sp" android:textStyle="bold"
         android:gravity="center_vertical"/>
     <TextView android:id="@+id/price5"
@@ -90,10 +115,15 @@
         android:layout_below="@id/row4" android:layout_toRightOf="@id/price5"
         android:text="" android:textSize="12sp" android:gravity="center_vertical"/>
 
-    <!-- ROW 6 -->
+    <!-- ROW 6 GMT -->
+    <ImageView android:id="@+id/icon6"
+        android:layout_width="24dp" android:layout_height="24dp"
+        android:layout_below="@id/row5" android:layout_marginTop="4dp"
+        android:src="@drawable/ic_gmt"/>
     <TextView android:id="@+id/row6"
-        android:layout_width="110dp" android:layout_height="32dp"
+        android:layout_width="80dp" android:layout_height="32dp"
         android:layout_below="@id/row5"
+        android:layout_toRightOf="@id/icon6" android:layout_marginLeft="4dp"
         android:text="GMT" android:textColor="#FFFFFF" android:textSize="15sp" android:textStyle="bold"
         android:gravity="center_vertical"/>
     <TextView android:id="@+id/price6"
@@ -106,10 +136,15 @@
         android:layout_below="@id/row5" android:layout_toRightOf="@id/price6"
         android:text="" android:textSize="12sp" android:gravity="center_vertical"/>
 
-    <!-- ROW 7 -->
+    <!-- ROW 7 XAU -->
+    <ImageView android:id="@+id/icon7"
+        android:layout_width="24dp" android:layout_height="24dp"
+        android:layout_below="@id/row6" android:layout_marginTop="4dp"
+        android:src="@drawable/ic_xau"/>
     <TextView android:id="@+id/row7"
-        android:layout_width="110dp" android:layout_height="32dp"
+        android:layout_width="80dp" android:layout_height="32dp"
         android:layout_below="@id/row6"
+        android:layout_toRightOf="@id/icon7" android:layout_marginLeft="4dp"
         android:text="XAU" android:textColor="#FFFFFF" android:textSize="15sp" android:textStyle="bold"
         android:gravity="center_vertical"/>
     <TextView android:id="@+id/price7"
@@ -122,10 +157,15 @@
         android:layout_below="@id/row6" android:layout_toRightOf="@id/price7"
         android:text="" android:textSize="12sp" android:gravity="center_vertical"/>
 
-    <!-- ROW 8 -->
+    <!-- ROW 8 Brent -->
+    <ImageView android:id="@+id/icon8"
+        android:layout_width="24dp" android:layout_height="24dp"
+        android:layout_below="@id/row7" android:layout_marginTop="4dp"
+        android:src="@drawable/ic_brent"/>
     <TextView android:id="@+id/row8"
-        android:layout_width="110dp" android:layout_height="32dp"
+        android:layout_width="80dp" android:layout_height="32dp"
         android:layout_below="@id/row7"
+        android:layout_toRightOf="@id/icon8" android:layout_marginLeft="4dp"
         android:text="Brent" android:textColor="#FFFFFF" android:textSize="15sp" android:textStyle="bold"
         android:gravity="center_vertical"/>
     <TextView android:id="@+id/price8"
@@ -138,10 +178,15 @@
         android:layout_below="@id/row7" android:layout_toRightOf="@id/price8"
         android:text="" android:textSize="12sp" android:gravity="center_vertical"/>
 
-    <!-- ROW 9 -->
+    <!-- ROW 9 USD/RUB -->
+    <ImageView android:id="@+id/icon9"
+        android:layout_width="24dp" android:layout_height="24dp"
+        android:layout_below="@id/row8" android:layout_marginTop="4dp"
+        android:src="@drawable/ic_usdrub"/>
     <TextView android:id="@+id/row9"
-        android:layout_width="110dp" android:layout_height="32dp"
+        android:layout_width="80dp" android:layout_height="32dp"
         android:layout_below="@id/row8"
+        android:layout_toRightOf="@id/icon9" android:layout_marginLeft="4dp"
         android:text="USD/RUB" android:textColor="#FFFFFF" android:textSize="15sp" android:textStyle="bold"
         android:gravity="center_vertical"/>
     <TextView android:id="@+id/price9"
