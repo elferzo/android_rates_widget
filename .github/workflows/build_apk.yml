@@ -24,23 +24,6 @@ jobs:
       - name: Setup project structure
         run: bash setup_project.sh
 
-      - name: Create root build.gradle
-        run: |
-          cat > build.gradle << 'EOF'
-          buildscript {
-              ext.kotlin_version = '1.9.0'
-              repositories { google(); mavenCentral() }
-              dependencies {
-                  classpath 'com.android.tools.build:gradle:8.1.0'
-                  classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-              }
-          }
-          allprojects { repositories { google(); mavenCentral() } }
-          EOF
-
-      - name: Create settings.gradle
-        run: echo "include ':app'" > settings.gradle
-
       - name: Install Gradle and generate wrapper
         run: |
           wget -q https://services.gradle.org/distributions/gradle-8.4-bin.zip -O /tmp/gradle.zip
@@ -48,6 +31,17 @@ jobs:
           export PATH=/opt/gradle/gradle-8.4/bin:$PATH
           gradle wrapper --gradle-version 8.4
           chmod +x gradlew
+
+      - name: Create settings.gradle
+        run: printf "include ':app'\n" > settings.gradle
+
+      - name: Create root build.gradle
+        run: |
+          printf 'buildscript {\n    ext.kotlin_version = "1.9.0"\n    repositories { google(); mavenCentral() }\n    dependencies {\n        classpath "com.android.tools.build:gradle:8.1.0"\n        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${"$"}{kotlin_version}"\n    }\n}\nallprojects { repositories { google(); mavenCentral() } }\n' > build.gradle
+
+      - name: Create app/build.gradle
+        run: |
+          printf 'plugins {\n    id "com.android.application"\n    id "kotlin-android"\n}\nandroid {\n    compileSdk 34\n    defaultConfig {\n        applicationId "com.pricewidget.widget"\n        minSdk 21\n        targetSdk 34\n        versionCode 1\n        versionName "1.0"\n    }\n    buildTypes { release { minifyEnabled false } }\n    compileOptions {\n        sourceCompatibility JavaVersion.VERSION_1_8\n        targetCompatibility JavaVersion.VERSION_1_8\n    }\n    kotlinOptions { jvmTarget = "1.8" }\n}\ndependencies {\n    implementation "androidx.appcompat:appcompat:1.6.1"\n    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.9.0"\n}\n' > app/build.gradle
 
       - name: Build APK
         run: ./gradlew assembleRelease --no-daemon
