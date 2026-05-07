@@ -5,7 +5,10 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@android:color/transparent"
-    android:padding="8dp">
+    android:paddingLeft="6dp"
+    android:paddingRight="6dp"
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp">
 
     <TextView
         android:id="@+id/header_updated"
@@ -13,175 +16,127 @@
         android:layout_height="wrap_content"
         android:text="Избранное"
         android:textColor="#CCFFFFFF"
-        android:textSize="12sp"
+        android:textSize="13sp"
         android:textStyle="bold"
-        android:layout_marginBottom="6dp"/>
+        android:layout_marginBottom="4dp"/>
 
-    <!-- BTC row -->
-    <LinearLayout android:layout_width="match_parent" android:layout_height="40dp"
-        android:orientation="horizontal" android:gravity="center_vertical"
-        android:layout_marginBottom="2dp">
-        <ImageView android:id="@+id/icon1"
-            android:layout_width="28dp" android:layout_height="28dp"
-            android:src="@drawable/ic_btc" android:layout_marginEnd="8dp"/>
-        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
-            android:layout_weight="1" android:orientation="vertical">
-            <TextView android:id="@+id/row1"
-                android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="BTC" android:textColor="#AAFFFFFF" android:textSize="11sp"/>
-        </LinearLayout>
-        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:orientation="vertical" android:gravity="end">
-            <TextView android:id="@+id/price1"
-                android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="—" android:textColor="#FFFFFF" android:textSize="14sp" android:textStyle="bold"/>
-            <TextView android:id="@+id/change1"
-                android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="" android:textSize="11sp" android:gravity="end"/>
-        </LinearLayout>
-    </LinearLayout>
-
-    <!-- ETH row -->
-    <LinearLayout android:layout_width="match_parent" android:layout_height="40dp"
-        android:orientation="horizontal" android:gravity="center_vertical"
-        android:layout_marginBottom="2dp">
-        <ImageView android:id="@+id/icon2"
-            android:layout_width="28dp" android:layout_height="28dp"
-            android:src="@drawable/ic_eth" android:layout_marginEnd="8dp"/>
-        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
-            android:layout_weight="1" android:orientation="vertical">
-            <TextView android:id="@+id/row2"
-                android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="ETH" android:textColor="#AAFFFFFF" android:textSize="11sp"/>
-        </LinearLayout>
-        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:orientation="vertical" android:gravity="end">
-            <TextView android:id="@+id/price2"
-                android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="—" android:textColor="#FFFFFF" android:textSize="14sp" android:textStyle="bold"/>
-            <TextView android:id="@+id/change2"
-                android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="" android:textSize="11sp" android:gravity="end"/>
-        </LinearLayout>
-    </LinearLayout>
-
-    <!-- SOL row -->
-    <LinearLayout android:layout_width="match_parent" android:layout_height="40dp"
-        android:orientation="horizontal" android:gravity="center_vertical"
-        android:layout_marginBottom="2dp">
-        <ImageView android:id="@+id/icon3"
-            android:layout_width="28dp" android:layout_height="28dp"
-            android:src="@drawable/ic_sol" android:layout_marginEnd="8dp"/>
-        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
-            android:layout_weight="1" android:orientation="vertical">
-            <TextView android:id="@+id/row3"
-                android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="SOL" android:textColor="#AAFFFFFF" android:textSize="11sp"/>
-        </LinearLayout>
-        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:orientation="vertical" android:gravity="end">
-            <TextView android:id="@+id/price3"
-                android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="—" android:textColor="#FFFFFF" android:textSize="14sp" android:textStyle="bold"/>
-            <TextView android:id="@+id/change3"
-                android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="" android:textSize="11sp" android:gravity="end"/>
-        </LinearLayout>
-    </LinearLayout>
-
-    <!-- GMT row -->
-    <LinearLayout android:layout_width="match_parent" android:layout_height="40dp"
-        android:orientation="horizontal" android:gravity="center_vertical"
-        android:layout_marginBottom="2dp">
-        <ImageView android:id="@+id/icon4"
-            android:layout_width="28dp" android:layout_height="28dp"
-            android:src="@drawable/ic_gmt" android:layout_marginEnd="8dp"/>
-        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
-            android:layout_weight="1" android:orientation="vertical">
-            <TextView android:id="@+id/row4"
-                android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="GMT" android:textColor="#AAFFFFFF" android:textSize="11sp"/>
-        </LinearLayout>
-        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:orientation="vertical" android:gravity="end">
-            <TextView android:id="@+id/price4"
-                android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="—" android:textColor="#FFFFFF" android:textSize="14sp" android:textStyle="bold"/>
-            <TextView android:id="@+id/change4"
-                android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="" android:textSize="11sp" android:gravity="end"/>
-        </LinearLayout>
-    </LinearLayout>
-
-    <!-- XAU row -->
-    <LinearLayout android:layout_width="match_parent" android:layout_height="40dp"
-        android:orientation="horizontal" android:gravity="center_vertical"
-        android:layout_marginBottom="2dp">
-        <ImageView android:id="@+id/icon5"
-            android:layout_width="28dp" android:layout_height="28dp"
-            android:src="@drawable/ic_xau" android:layout_marginEnd="8dp"/>
-        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
-            android:layout_weight="1" android:orientation="vertical">
-            <TextView android:id="@+id/row5"
-                android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="XAU" android:textColor="#AAFFFFFF" android:textSize="11sp"/>
-        </LinearLayout>
-        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:orientation="vertical" android:gravity="end">
-            <TextView android:id="@+id/price5"
-                android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="—" android:textColor="#FFFFFF" android:textSize="14sp" android:textStyle="bold"/>
-            <TextView android:id="@+id/change5"
-                android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="" android:textSize="11sp" android:gravity="end"/>
-        </LinearLayout>
-    </LinearLayout>
-
-    <!-- Brent row -->
-    <LinearLayout android:layout_width="match_parent" android:layout_height="40dp"
-        android:orientation="horizontal" android:gravity="center_vertical"
-        android:layout_marginBottom="2dp">
-        <ImageView android:id="@+id/icon6"
-            android:layout_width="28dp" android:layout_height="28dp"
-            android:src="@drawable/ic_brent" android:layout_marginEnd="8dp"/>
-        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
-            android:layout_weight="1" android:orientation="vertical">
-            <TextView android:id="@+id/row6"
-                android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="Brent" android:textColor="#AAFFFFFF" android:textSize="11sp"/>
-        </LinearLayout>
-        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:orientation="vertical" android:gravity="end">
-            <TextView android:id="@+id/price6"
-                android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="—" android:textColor="#FFFFFF" android:textSize="14sp" android:textStyle="bold"/>
-            <TextView android:id="@+id/change6"
-                android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="" android:textSize="11sp" android:gravity="end"/>
-        </LinearLayout>
-    </LinearLayout>
-
-    <!-- USD/RUB row -->
-    <LinearLayout android:layout_width="match_parent" android:layout_height="40dp"
+    <!-- ROW 1 BTC: icon | name+price | change -->
+    <LinearLayout android:layout_width="match_parent" android:layout_height="36dp"
         android:orientation="horizontal" android:gravity="center_vertical">
-        <ImageView android:id="@+id/icon7"
-            android:layout_width="28dp" android:layout_height="28dp"
-            android:src="@drawable/ic_usdrub" android:layout_marginEnd="8dp"/>
-        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
-            android:layout_weight="1" android:orientation="vertical">
-            <TextView android:id="@+id/row7"
-                android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="USD/RUB" android:textColor="#AAFFFFFF" android:textSize="11sp"/>
-        </LinearLayout>
-        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:orientation="vertical" android:gravity="end">
-            <TextView android:id="@+id/price7"
-                android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="—" android:textColor="#FFFFFF" android:textSize="14sp" android:textStyle="bold"/>
-            <TextView android:id="@+id/change7"
-                android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="" android:textSize="11sp" android:gravity="end"/>
-        </LinearLayout>
+        <ImageView android:layout_width="26dp" android:layout_height="26dp"
+            android:src="@drawable/ic_btc" android:layout_marginEnd="6dp"/>
+        <TextView android:id="@+id/row1"
+            android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+            android:text="BTC" android:textColor="#FFFFFF" android:textSize="14sp" android:textStyle="bold"/>
+        <TextView android:id="@+id/price1"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="—" android:textColor="#FFFFFF" android:textSize="14sp" android:textStyle="bold"
+            android:layout_marginEnd="6dp"/>
+        <TextView android:id="@+id/change1"
+            android:layout_width="56dp" android:layout_height="wrap_content"
+            android:text="" android:textSize="11sp" android:gravity="end"/>
+    </LinearLayout>
+
+    <!-- ROW 2 ETH -->
+    <LinearLayout android:layout_width="match_parent" android:layout_height="36dp"
+        android:orientation="horizontal" android:gravity="center_vertical">
+        <ImageView android:layout_width="26dp" android:layout_height="26dp"
+            android:src="@drawable/ic_eth" android:layout_marginEnd="6dp"/>
+        <TextView android:id="@+id/row2"
+            android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+            android:text="ETH" android:textColor="#FFFFFF" android:textSize="14sp" android:textStyle="bold"/>
+        <TextView android:id="@+id/price2"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="—" android:textColor="#FFFFFF" android:textSize="14sp" android:textStyle="bold"
+            android:layout_marginEnd="6dp"/>
+        <TextView android:id="@+id/change2"
+            android:layout_width="56dp" android:layout_height="wrap_content"
+            android:text="" android:textSize="11sp" android:gravity="end"/>
+    </LinearLayout>
+
+    <!-- ROW 3 SOL -->
+    <LinearLayout android:layout_width="match_parent" android:layout_height="36dp"
+        android:orientation="horizontal" android:gravity="center_vertical">
+        <ImageView android:layout_width="26dp" android:layout_height="26dp"
+            android:src="@drawable/ic_sol" android:layout_marginEnd="6dp"/>
+        <TextView android:id="@+id/row3"
+            android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+            android:text="SOL" android:textColor="#FFFFFF" android:textSize="14sp" android:textStyle="bold"/>
+        <TextView android:id="@+id/price3"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="—" android:textColor="#FFFFFF" android:textSize="14sp" android:textStyle="bold"
+            android:layout_marginEnd="6dp"/>
+        <TextView android:id="@+id/change3"
+            android:layout_width="56dp" android:layout_height="wrap_content"
+            android:text="" android:textSize="11sp" android:gravity="end"/>
+    </LinearLayout>
+
+    <!-- ROW 4 GMT -->
+    <LinearLayout android:layout_width="match_parent" android:layout_height="36dp"
+        android:orientation="horizontal" android:gravity="center_vertical">
+        <ImageView android:layout_width="26dp" android:layout_height="26dp"
+            android:src="@drawable/ic_gmt" android:layout_marginEnd="6dp"/>
+        <TextView android:id="@+id/row4"
+            android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+            android:text="GMT" android:textColor="#FFFFFF" android:textSize="14sp" android:textStyle="bold"/>
+        <TextView android:id="@+id/price4"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="—" android:textColor="#FFFFFF" android:textSize="14sp" android:textStyle="bold"
+            android:layout_marginEnd="6dp"/>
+        <TextView android:id="@+id/change4"
+            android:layout_width="56dp" android:layout_height="wrap_content"
+            android:text="" android:textSize="11sp" android:gravity="end"/>
+    </LinearLayout>
+
+    <!-- ROW 5 XAU -->
+    <LinearLayout android:layout_width="match_parent" android:layout_height="36dp"
+        android:orientation="horizontal" android:gravity="center_vertical">
+        <ImageView android:layout_width="26dp" android:layout_height="26dp"
+            android:src="@drawable/ic_xau" android:layout_marginEnd="6dp"/>
+        <TextView android:id="@+id/row5"
+            android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+            android:text="XAU" android:textColor="#FFFFFF" android:textSize="14sp" android:textStyle="bold"/>
+        <TextView android:id="@+id/price5"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="—" android:textColor="#FFFFFF" android:textSize="14sp" android:textStyle="bold"
+            android:layout_marginEnd="6dp"/>
+        <TextView android:id="@+id/change5"
+            android:layout_width="56dp" android:layout_height="wrap_content"
+            android:text="" android:textSize="11sp" android:gravity="end"/>
+    </LinearLayout>
+
+    <!-- ROW 6 Brent -->
+    <LinearLayout android:layout_width="match_parent" android:layout_height="36dp"
+        android:orientation="horizontal" android:gravity="center_vertical">
+        <ImageView android:layout_width="26dp" android:layout_height="26dp"
+            android:src="@drawable/ic_brent" android:layout_marginEnd="6dp"/>
+        <TextView android:id="@+id/row6"
+            android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+            android:text="Brent" android:textColor="#FFFFFF" android:textSize="14sp" android:textStyle="bold"/>
+        <TextView android:id="@+id/price6"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="—" android:textColor="#FFFFFF" android:textSize="14sp" android:textStyle="bold"
+            android:layout_marginEnd="6dp"/>
+        <TextView android:id="@+id/change6"
+            android:layout_width="56dp" android:layout_height="wrap_content"
+            android:text="" android:textSize="11sp" android:gravity="end"/>
+    </LinearLayout>
+
+    <!-- ROW 7 USD/RUB -->
+    <LinearLayout android:layout_width="match_parent" android:layout_height="36dp"
+        android:orientation="horizontal" android:gravity="center_vertical">
+        <ImageView android:layout_width="26dp" android:layout_height="26dp"
+            android:src="@drawable/ic_usdrub" android:layout_marginEnd="6dp"/>
+        <TextView android:id="@+id/row7"
+            android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+            android:text="USD/RUB" android:textColor="#FFFFFF" android:textSize="14sp" android:textStyle="bold"/>
+        <TextView android:id="@+id/price7"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="—" android:textColor="#FFFFFF" android:textSize="14sp" android:textStyle="bold"
+            android:layout_marginEnd="6dp"/>
+        <TextView android:id="@+id/change7"
+            android:layout_width="56dp" android:layout_height="wrap_content"
+            android:text="" android:textSize="11sp" android:gravity="end"/>
     </LinearLayout>
 
 </LinearLayout>

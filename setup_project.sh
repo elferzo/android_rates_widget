@@ -14,7 +14,6 @@ cp BootReceiver.kt   "$KT/"
 cp widget_layout.xml "$RES/layout/"
 cp AndroidManifest.xml "$BASE/"
 
-# Иконки из корня репо в drawable
 cp ic_btc.xml    "$RES/drawable/"
 cp ic_eth.xml    "$RES/drawable/"
 cp ic_sol.xml    "$RES/drawable/"
@@ -34,10 +33,10 @@ cat > "$RES/xml/widget_info.xml" << 'XML'
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:minWidth="250dp"
-    android:minHeight="300dp"
-    android:targetCellWidth="4"
-    android:targetCellHeight="6"
+    android:minWidth="200dp"
+    android:minHeight="260dp"
+    android:minResizeWidth="160dp"
+    android:minResizeHeight="180dp"
     android:updatePeriodMillis="0"
     android:initialLayout="@layout/widget_layout"
     android:previewLayout="@layout/widget_layout"
