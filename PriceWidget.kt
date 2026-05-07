@@ -93,22 +93,29 @@ class PriceWidget : AppWidgetProvider() {
 
             // Крипта — Binance API (без лимитов, без ключа)
             // BTC
-            result.add(fetchBinance("BTCUSDT"))
+            result.add(fetchBinance("BTCUSDT", 2))
             // ETH
-            result.add(fetchBinance("ETHUSDT"))
+            result.add(fetchBinance("ETHUSDT", 2))
             // SOL
-            result.add(fetchBinance("SOLUSDT"))
+            result.add(fetchBinance("SOLUSDT", 2))
             // GMT
-            result.add(fetchBinance("GMTUSDT"))
+            result.add(fetchBinance("GMTUSDT", 4))
 
             // XAU — metals.live
             try {
                 val text = get("https://api.metals.live/v1/spot/gold")
-                val clean = text.trim().removePrefix("[").removeSuffix("]").trim()
-                val price = JSONObject(clean).getDouble("gold")
+                val arr = org.json.JSONArray(text.trim())
+                val price = arr.getJSONObject(0).getDouble("gold")
                 result.add(AssetPrice("\$${fmt(price, false)}", 0.0))
             } catch (e: Exception) {
-                result.add(AssetPrice("—", 0.0))
+                try {
+                    // fallback: frankfurter XAU->USD
+                    val json = JSONObject(get("https://api.frankfurter.app/latest?from=XAU&to=USD"))
+                    val price = json.getJSONObject("rates").getDouble("USD")
+                    result.add(AssetPrice("\$${fmt(price, false)}", 0.0))
+                } catch (e2: Exception) {
+                    result.add(AssetPrice("—", 0.0))
+                }
             }
 
             // Brent — Yahoo Finance
@@ -138,12 +145,12 @@ class PriceWidget : AppWidgetProvider() {
             return result
         }
 
-        private fun fetchBinance(symbol: String): AssetPrice {
+        private fun fetchBinance(symbol: String, decimals: Int = 2): AssetPrice {
             return try {
                 val json = JSONObject(get("https://api.binance.com/api/v3/ticker/24hr?symbol=$symbol"))
                 val price = json.getDouble("lastPrice")
                 val change = json.getDouble("priceChangePercent")
-                AssetPrice("\$${fmt(price, price >= 1000)}", change)
+                AssetPrice("\$${fmtD(price, price >= 1000, decimals)}", change)
             } catch (e: Exception) {
                 AssetPrice("—", 0.0)
             }
@@ -191,5 +198,11 @@ class PriceWidget : AppWidgetProvider() {
         private fun fmt(v: Double, large: Boolean): String =
             if (large) DecimalFormat("#,##0").format(v)
             else DecimalFormat("#,##0.00").format(v)
+
+        private fun fmtD(v: Double, large: Boolean, decimals: Int): String {
+            if (large && v >= 1000) return DecimalFormat("#,##0").format(v)
+            val pattern = "#,##0." + "0".repeat(decimals)
+            return DecimalFormat(pattern).format(v)
+        }
     }
 }
