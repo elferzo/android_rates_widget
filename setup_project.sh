@@ -14,13 +14,9 @@ cp BootReceiver.kt   "$KT/"
 cp widget_layout.xml "$RES/layout/"
 cp AndroidManifest.xml "$BASE/"
 
-cp ic_btc.xml    "$RES/drawable/"
-cp ic_eth.xml    "$RES/drawable/"
-cp ic_sol.xml    "$RES/drawable/"
-cp ic_gmt.xml    "$RES/drawable/"
-cp ic_xau.xml    "$RES/drawable/"
-cp ic_brent.xml  "$RES/drawable/"
-cp ic_usdrub.xml "$RES/drawable/"
+for ico in ic_btc ic_eth ic_sol ic_doge ic_ltc ic_gmt ic_xau ic_brent ic_usdrub; do
+    cp "${ico}.xml" "$RES/drawable/"
+done
 
 cat > "$RES/values/strings.xml" << 'XML'
 <?xml version="1.0" encoding="utf-8"?>
@@ -34,9 +30,9 @@ cat > "$RES/xml/widget_info.xml" << 'XML'
 <appwidget-provider
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:minWidth="200dp"
-    android:minHeight="260dp"
+    android:minHeight="320dp"
     android:minResizeWidth="160dp"
-    android:minResizeHeight="180dp"
+    android:minResizeHeight="200dp"
     android:updatePeriodMillis="0"
     android:initialLayout="@layout/widget_layout"
     android:previewLayout="@layout/widget_layout"

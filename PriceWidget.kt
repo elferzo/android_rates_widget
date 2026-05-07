@@ -50,26 +50,27 @@ class PriceWidget : AppWidgetProvider() {
     companion object {
         const val ACTION_UPDATE = "com.pricewidget.ACTION_UPDATE"
 
-        val ROW_IDS = intArrayOf(R.id.row1, R.id.row2, R.id.row3, R.id.row4, R.id.row5, R.id.row6, R.id.row7)
-        val CHANGE_IDS = intArrayOf(R.id.change1, R.id.change2, R.id.change3, R.id.change4, R.id.change5, R.id.change6, R.id.change7)
+        val ROW_IDS    = intArrayOf(R.id.row1, R.id.row2, R.id.row3, R.id.row4, R.id.row5, R.id.row6, R.id.row7, R.id.row8, R.id.row9)
+        val CHANGE_IDS = intArrayOf(R.id.change1, R.id.change2, R.id.change3, R.id.change4, R.id.change5, R.id.change6, R.id.change7, R.id.change8, R.id.change9)
 
         val COLORS = intArrayOf(
-            0xFFF7931A.toInt(),
-            0xFF627EEA.toInt(),
-            0xFF9945FF.toInt(),
-            0xFF1DB954.toInt(),
-            0xFFFFD700.toInt(),
-            0xFF4FC3F7.toInt(),
-            0xFF4DB6AC.toInt()
+            0xFFF7931A.toInt(),  // BTC
+            0xFF627EEA.toInt(),  // ETH
+            0xFF9945FF.toInt(),  // SOL
+            0xFFC2A633.toInt(),  // DOGE
+            0xFFBFBBBB.toInt(),  // LTC
+            0xFF1DB954.toInt(),  // GMT
+            0xFFFFD700.toInt(),  // XAU
+            0xFF4FC3F7.toInt(),  // Brent
+            0xFF4DB6AC.toInt()   // USD/RUB
         )
-        val LABELS = arrayOf("BTC", "ETH", "SOL", "GMT", "XAU", "Brent", "USD/RUB")
+        val LABELS = arrayOf("BTC", "ETH", "SOL", "DOGE", "LTC", "GMT", "XAU", "Brent", "USD/RUB")
 
         fun updateWidget(context: Context, mgr: AppWidgetManager, widgetId: Int) {
             Executors.newSingleThreadExecutor().execute {
                 val prices = fetchPrices()
                 Handler(Looper.getMainLooper()).post {
                     val v = RemoteViews(context.packageName, R.layout.widget_layout)
-                    // Скрываем header_updated — пустая строка
                     v.setTextViewText(R.id.header_updated, "")
                     buildRows(v, prices)
                     mgr.updateAppWidget(widgetId, v)
@@ -90,58 +91,46 @@ class PriceWidget : AppWidgetProvider() {
 
         fun fetchPrices(): List<AssetPrice> {
             val result = mutableListOf<AssetPrice>()
-
-            // Крипта — Binance API (без лимитов, без ключа)
-            // BTC
             result.add(fetchBinance("BTCUSDT", 2))
-            // ETH
             result.add(fetchBinance("ETHUSDT", 2))
-            // SOL
             result.add(fetchBinance("SOLUSDT", 2))
-            // GMT
+            result.add(fetchBinance("DOGEUSDT", 4))
+            result.add(fetchBinance("LTCUSDT", 2))
             result.add(fetchBinance("GMTUSDT", 4))
 
-            // XAU — freegoldapi.com (no key, returns [{date,price},...])
+            // XAU — freegoldapi.com, fallback Yahoo GC=F
             try {
-                val text = get("https://freegoldapi.com/data/latest.json")
-                val arr = org.json.JSONArray(text.trim())
+                val arr = JSONArray(get("https://freegoldapi.com/data/latest.json"))
                 val price = arr.getJSONObject(arr.length() - 1).getDouble("price")
                 result.add(AssetPrice("\$${fmt(price, false)}", 0.0))
             } catch (e: Exception) {
                 try {
-                    // fallback: Yahoo Finance GC=F (gold futures)
-                    val json = JSONObject(get("https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?interval=1d&range=2d"))
-                    val meta = json.getJSONObject("chart").getJSONArray("result").getJSONObject(0).getJSONObject("meta")
+                    val meta = JSONObject(get("https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?interval=1d&range=2d"))
+                        .getJSONObject("chart").getJSONArray("result").getJSONObject(0).getJSONObject("meta")
                     val price = meta.getDouble("regularMarketPrice")
-                    val prev = meta.getDouble("chartPreviousClose")
+                    val prev  = meta.getDouble("chartPreviousClose")
                     result.add(AssetPrice("\$${fmt(price, false)}", if (prev > 0) (price - prev) / prev * 100 else 0.0))
-                } catch (e2: Exception) {
-                    result.add(AssetPrice("—", 0.0))
-                }
+                } catch (e2: Exception) { result.add(AssetPrice("—", 0.0)) }
             }
 
-            // Brent — Yahoo Finance
+            // Brent — Yahoo BZ=F
             try {
-                val json = JSONObject(get("https://query1.finance.yahoo.com/v8/finance/chart/BZ%3DF?interval=1d&range=2d"))
-                val meta = json.getJSONObject("chart").getJSONArray("result").getJSONObject(0).getJSONObject("meta")
+                val meta = JSONObject(get("https://query1.finance.yahoo.com/v8/finance/chart/BZ%3DF?interval=1d&range=2d"))
+                    .getJSONObject("chart").getJSONArray("result").getJSONObject(0).getJSONObject("meta")
                 val price = meta.getDouble("regularMarketPrice")
-                val prev = meta.getDouble("chartPreviousClose")
+                val prev  = meta.getDouble("chartPreviousClose")
                 result.add(AssetPrice("\$${fmt(price, false)}", if (prev > 0) (price - prev) / prev * 100 else 0.0))
-            } catch (e: Exception) {
-                result.add(AssetPrice("—", 0.0))
-            }
+            } catch (e: Exception) { result.add(AssetPrice("—", 0.0)) }
 
             // USD/RUB
             try {
-                val json = JSONObject(get("https://open.er-api.com/v6/latest/USD"))
-                result.add(AssetPrice(fmt(json.getJSONObject("rates").getDouble("RUB"), false), 0.0))
+                val rub = JSONObject(get("https://open.er-api.com/v6/latest/USD")).getJSONObject("rates").getDouble("RUB")
+                result.add(AssetPrice(fmt(rub, false), 0.0))
             } catch (e: Exception) {
                 try {
-                    val json = JSONObject(get("https://api.frankfurter.app/latest?from=USD&to=RUB"))
-                    result.add(AssetPrice(fmt(json.getJSONObject("rates").getDouble("RUB"), false), 0.0))
-                } catch (e2: Exception) {
-                    result.add(AssetPrice("—", 0.0))
-                }
+                    val rub = JSONObject(get("https://api.frankfurter.app/latest?from=USD&to=RUB")).getJSONObject("rates").getDouble("RUB")
+                    result.add(AssetPrice(fmt(rub, false), 0.0))
+                } catch (e2: Exception) { result.add(AssetPrice("—", 0.0)) }
             }
 
             return result
@@ -149,13 +138,11 @@ class PriceWidget : AppWidgetProvider() {
 
         private fun fetchBinance(symbol: String, decimals: Int = 2): AssetPrice {
             return try {
-                val json = JSONObject(get("https://api.binance.com/api/v3/ticker/24hr?symbol=$symbol"))
-                val price = json.getDouble("lastPrice")
+                val json   = JSONObject(get("https://api.binance.com/api/v3/ticker/24hr?symbol=$symbol"))
+                val price  = json.getDouble("lastPrice")
                 val change = json.getDouble("priceChangePercent")
                 AssetPrice("\$${fmtD(price, price >= 1000, decimals)}", change)
-            } catch (e: Exception) {
-                AssetPrice("—", 0.0)
-            }
+            } catch (e: Exception) { AssetPrice("—", 0.0) }
         }
 
         fun buildRows(views: RemoteViews, prices: List<AssetPrice>) {
@@ -163,22 +150,27 @@ class PriceWidget : AppWidgetProvider() {
             for (i in prices.indices) {
                 val label = LABELS[i]
                 val price = prices[i].price
-                val full = "● $label   $price"
-                val ss = SpannableString(full)
+                // "● LABEL        $price" — пробелы создают отступ цены
+                val gap   = "        "
+                val full  = "● $label$gap$price"
+                val ss    = SpannableString(full)
 
+                // цветной буллет
                 ss.setSpan(ForegroundColorSpan(COLORS[i]), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                // label белый bold
                 ss.setSpan(StyleSpan(Typeface.BOLD), 2, 2 + label.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
                 ss.setSpan(ForegroundColorSpan(0xFFFFFFFF.toInt()), 2, 2 + label.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-                val priceStart = full.length - price.length
-                ss.setSpan(StyleSpan(Typeface.BOLD), priceStart, full.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-                ss.setSpan(ForegroundColorSpan(0xFFFFFFFF.toInt()), priceStart, full.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-                ss.setSpan(RelativeSizeSpan(1.15f), priceStart, full.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                // цена чуть крупнее
+                val ps = full.length - price.length
+                ss.setSpan(StyleSpan(Typeface.BOLD), ps, full.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                ss.setSpan(ForegroundColorSpan(0xFFFFFFFF.toInt()), ps, full.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                ss.setSpan(RelativeSizeSpan(1.1f), ps, full.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
                 views.setTextViewText(ROW_IDS[i], ss)
 
                 val ch = prices[i].change
                 if (ch != 0.0) {
-                    views.setTextViewText(CHANGE_IDS[i], "   ${df.format(ch)}%")
+                    views.setTextViewText(CHANGE_IDS[i], df.format(ch) + "%")
                     views.setTextColor(CHANGE_IDS[i], if (ch >= 0) 0xFF4CAF50.toInt() else 0xFFE53935.toInt())
                 } else {
                     views.setTextViewText(CHANGE_IDS[i], "")
@@ -197,14 +189,12 @@ class PriceWidget : AppWidgetProvider() {
                 am.setExact(AlarmManager.RTC_WAKEUP, next, pi)
         }
 
-        private fun fmt(v: Double, large: Boolean): String =
-            if (large) DecimalFormat("#,##0").format(v)
-            else DecimalFormat("#,##0.00").format(v)
+        private fun fmt(v: Double, large: Boolean) =
+            if (large) DecimalFormat("#,##0").format(v) else DecimalFormat("#,##0.00").format(v)
 
-        private fun fmtD(v: Double, large: Boolean, decimals: Int): String {
-            if (large && v >= 1000) return DecimalFormat("#,##0").format(v)
-            val pattern = "#,##0." + "0".repeat(decimals)
-            return DecimalFormat(pattern).format(v)
+        private fun fmtD(v: Double, large: Boolean, d: Int): String {
+            if (large) return DecimalFormat("#,##0").format(v)
+            return DecimalFormat("#,##0." + "0".repeat(d)).format(v)
         }
     }
 }
