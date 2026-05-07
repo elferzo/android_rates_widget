@@ -5,6 +5,9 @@ on:
   push:
     branches: [ main ]
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -23,7 +26,7 @@ jobs:
 
       - name: Create root build.gradle
         run: |
-          cat > build.gradle <<'EOF'
+          cat > build.gradle << 'EOF'
           buildscript {
               ext.kotlin_version = '1.9.0'
               repositories { google(); mavenCentral() }
@@ -38,6 +41,14 @@ jobs:
       - name: Create settings.gradle
         run: echo "include ':app'" > settings.gradle
 
+      - name: Install Gradle and generate wrapper
+        run: |
+          wget -q https://services.gradle.org/distributions/gradle-8.4-bin.zip -O /tmp/gradle.zip
+          unzip -q /tmp/gradle.zip -d /opt/gradle
+          export PATH=/opt/gradle/gradle-8.4/bin:$PATH
+          gradle wrapper --gradle-version 8.4
+          chmod +x gradlew
+
       - name: Build APK
         run: ./gradlew assembleRelease --no-daemon
 
@@ -48,7 +59,7 @@ jobs:
           path: app/build/outputs/apk/release/*.apk
 
       - name: Create Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         if: github.ref == 'refs/heads/main'
         with:
           tag_name: v${{ github.run_number }}
